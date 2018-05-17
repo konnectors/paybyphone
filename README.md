@@ -1,5 +1,5 @@
-[Cozy][cozy] <YOUR SUPER NEW KONNECTOR NAME>
-=======================================
+[Cozy][cozy] PayByPhone
+=======================
 
 What's Cozy?
 ------------
@@ -11,8 +11,20 @@ What's Cozy?
 What is this konnector about ?
 ------------------------------
 
-This konnector retrieves your <SOME DATA> and <SOME OTHER DATA> from <SERVICE>
-<YOUR DESCRIPTION HERE>
+This konnector retrieves your bills for the PayByPhone parking payment service.
+
+Example of bill retrieved:
+
+```
+{
+  amount: 0.65,
+  date: '2018-03-08T19:47:08Z',
+  metadata: { version: 1 },
+  subtype: 'Parking pour AQ007KF',
+  type: 'parking',
+  vendor: 'PayByPhone'
+}
+```
 
 ### Open a Pull-Request
 
@@ -45,8 +57,7 @@ This connector uses [cozy-konnector-libs](https://github.com/cozy/cozy-konnector
 
 ### Maintainer
 
-The lead maintainers for this konnector is <YOUR NAME>
-
+The lead maintainers for this konnector is [Patrick Browne](https://github.com/ptbrowne)
 
 ### Get in touch
 
