@@ -48,7 +48,9 @@ async function start(fields) {
   }))
 
   await saveBills(bills, fields.folderPath, {
-    identifiers: ['paybyphone']
+    // PayByPhone puts the name of the town as the label of the banking operation so
+    // it changes everytime
+    identifiers: ['']
   })
 }
 
