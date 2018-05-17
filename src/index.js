@@ -44,7 +44,11 @@ async function start(fields) {
     },
     subtype: `Parking pour ${s.vehicle.licensePlate}`,
     type: 'parking',
-    vendor: 'PayByPhone'
+    vendor: 'PayByPhone',
+    location: s.locationId,
+    startTime: s.startTime,
+    expireTime: s.expireTime,
+    vehicle: s.vehicle.licensePlate
   }))
 
   await saveBills(bills, fields.folderPath, {
