@@ -29,7 +29,20 @@ let tokenData, accountId
 // the account information come from ./konnector-dev-config.json file
 async function start(fields) {
   log('info', 'Authenticating ...')
-  await authenticate(fields.login, fields.password)
+  try {
+    await authenticate(fields.login, fields.password)
+  } catch (e) {
+    if (
+      e &&
+      e.response &&
+      e.response.error_description === 'IncorrectUsernameOrPassword'
+    ) {
+      log('critical', 'LOGIN_FAILED')
+    } else {
+      log('critical', 'UNKNOWN_ERROR')
+    }
+    return
+  }
   log('info', 'Successfully logged in')
   // // The BaseKonnector instance expects a Promise as return of the function
   log('info', 'Fetching the list of parking sessions')
@@ -79,8 +92,8 @@ function authorizedRequest(options) {
 
 // this shows authentication using the [signin function](https://github.com/konnectors/libs/blob/master/packages/cozy-konnector-libs/docs/api.md#module_signin)
 // even if this in another domain here, but it works as an example
-function authenticate(username, password) {
-  return request({
+async function authenticate(username, password) {
+  tokenData = await request({
     method: 'POST',
     uri: 'https://api.paybyphone.com/identity/token',
     headers: {
@@ -92,8 +105,5 @@ function authenticate(username, password) {
       password: password,
       client_id: 'paybyphone_webapp'
     })
-  }).then(data => {
-    tokenData = data
-    return tokenData
   })
 }
