@@ -50,7 +50,7 @@
   "locales": {
     "fr": {
       "short_description": "Connecteur PayByPhone",
-      "long_description": "Ce connecteur récupère vos factures Connecteur PayByPhone",
+      "long_description": "Ce connecteur récupère vos factures PayByPhone",
       "permissions": {
         "bank operations": {
           "description": "Utilisé pour relier les factures à des operations bancaires"
