@@ -5,8 +5,9 @@ env:
   global:
   - GH_USER_EMAIL="travis@example.org"
   - GH_USER_NAME="cozy-bot"
-  - DEPLOY_REPOSITORY="git@github.com:konnectors/cozy-konnector-paybyphone.git"
-  - secure: CQ44ZVjPAIVRvGgMcduSAX4VmaOrzF3nrJXPFUsNQ2tMVVdaAlI1zTNkdfntqigZgz6Mpk9x+2FcA8qrkNzQ4cW0lPP9f5dBtSH1xetfpXDFKprW4bqzmhgXSXJFTOYxkChOBPmCYJr+Vv4XqDkv/dBEPdfRSgvVyd5YxHSd5HBU91rKyR+Hox7LTnhmlXleLIs11EQgp7RK+L28MBCtCqAa2niFlKKRlqupm2FSpZzxCh9qeY0wKCQzPE+QZUm4waJ1SUGKQwbzAfyOxu2O6rwzaTSknfdJoSX6AMxjRTWBC9c3VfUGM3wjVJIqMhiUj2FQhVIjiDyX/W60/q3UMC5WYzSvEDDfhnKCPwiUKSU7HvSxx9q2YP34evxKo7KPahz9zLlQZvW+GBMyI9hbMDBTALuQVVzhftsvqfrogyYhkEPviiYiVADWNxhacsbUjRA5svXnZvtmCPo7fLFwel/krgC5Z8AwAY0YxWjSHNVScUkieSDCrlxrC09vTtG60unt9gtXbD5ruUkDLWSUwHBv2p0WY1TdP+2Vlf3yYfBvEVbqi59AxG+T17bq7Xv3QZnkrwC+UOCNCeg+gHPv+fRpUaYWzCO4uaoY/nlJa7RulQFhGca3A//6xRo/KgWw9JJnOXJelNjE9oHCUu9xShotUZKOF+O93V/BRqs9ITo=
+  - DEPLOY_REPOSITORY="git@github.com:konnectors/paybyphone.git"
+  # REGISTRY_TOKEN(editor=cozy, app=paybyphone)
+  - secure: t/+iJKVN2WPvWyx2Fq56staSMs3mctnK5BHT3ljLGmjfHjvGqKvTaNgIbi7px9oCFu30NdSyu08RXuuA6DSBE8UHaZ5Iax9oZe2v68D448JOVHc+dPMmjPBnHpgdAFUEOoxbhUk/xTWTJse0KF6BGRHCcfmlq1p+zaQ3pXFqQiOvPdi2WWOQeaCTnjsaR4yrU1Q3BKmmWrUVhad5aEL8mzGPN0EKLBy119z3HEQUaAzbEcNJ/gqzTrP5Sr0L+RtG+UKfZBqlfUYeQmFNUZOsOZvp2OwDIUjldjAOaKe17CEL8rj8LGnyrlAykKQXnAcjSz9hXvh01D/QLfFaNfWLg9HqGX6QCpqxRoKBT6ZOnpge/HeWxhyjuIqX1M09Wiy3/KAkgZtwIxdvDEGgi+dRZlr+LCMNkf/Azg3EL6tfdQF3lhCNyiAZwA9BqRI9pSaXfFQbnXgHdYRVUC5606Xb3OzV9MOYbdYZgkedS8SzUya1y6JBMXVpR0X10MXCp037iWF49ArvC6DDT+2W4DWVnNmMymkXQm4H447ddA4g0mv6uNhYiur0+jp2SLqcVfXc1lCTD00BsY2huFT4/LSxA3cXsO2S1w4VYkZZhQXgFNldognwNiOQy0a7rNUlenhohT22Zsx6Ow9SMzqxRht1XN8PJzW2UCzX+YafbEt4CVQ=
 cache:
   yarn: true
   directories:
@@ -31,9 +32,8 @@ deploy:
   on:
     tags: true
 before_install:
-# run the yarn travisDeployKey command to genrate this
-# - openssl aes-256-cbc -K $encrypted_0b21ecdcf920_key -iv $encrypted_0b21ecdcf920_iv
-#   -in github_deploy_key.enc -out /tmp/github_deploy_key -d
+- openssl aes-256-cbc -K $encrypted_577c2af3e254_key -iv $encrypted_577c2af3e254_iv
+  -in github_deploy_key.enc -out /tmp/github_deploy_key -d
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/github_deploy_key
 - ssh-add /tmp/github_deploy_key
