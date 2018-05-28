@@ -1,0 +1,42 @@
+language: node_js
+node_js:
+- '8'
+env:
+  global:
+  - GH_USER_EMAIL="travis@example.org"
+  - GH_USER_NAME="cozy-bot"
+  - DEPLOY_REPOSITORY="git@github.com:konnectors/paybyphone.git"
+  # REGISTRY_TOKEN(editor=cozy, app=paybyphone)
+  - secure: t/+iJKVN2WPvWyx2Fq56staSMs3mctnK5BHT3ljLGmjfHjvGqKvTaNgIbi7px9oCFu30NdSyu08RXuuA6DSBE8UHaZ5Iax9oZe2v68D448JOVHc+dPMmjPBnHpgdAFUEOoxbhUk/xTWTJse0KF6BGRHCcfmlq1p+zaQ3pXFqQiOvPdi2WWOQeaCTnjsaR4yrU1Q3BKmmWrUVhad5aEL8mzGPN0EKLBy119z3HEQUaAzbEcNJ/gqzTrP5Sr0L+RtG+UKfZBqlfUYeQmFNUZOsOZvp2OwDIUjldjAOaKe17CEL8rj8LGnyrlAykKQXnAcjSz9hXvh01D/QLfFaNfWLg9HqGX6QCpqxRoKBT6ZOnpge/HeWxhyjuIqX1M09Wiy3/KAkgZtwIxdvDEGgi+dRZlr+LCMNkf/Azg3EL6tfdQF3lhCNyiAZwA9BqRI9pSaXfFQbnXgHdYRVUC5606Xb3OzV9MOYbdYZgkedS8SzUya1y6JBMXVpR0X10MXCp037iWF49ArvC6DDT+2W4DWVnNmMymkXQm4H447ddA4g0mv6uNhYiur0+jp2SLqcVfXc1lCTD00BsY2huFT4/LSxA3cXsO2S1w4VYkZZhQXgFNldognwNiOQy0a7rNUlenhohT22Zsx6Ow9SMzqxRht1XN8PJzW2UCzX+YafbEt4CVQ=
+cache:
+  yarn: true
+  directories:
+  - node_modules
+branches:
+  except:
+  - build
+  - latest
+script:
+- yarn lint
+- yarn run check
+- yarn build
+deploy:
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  on:
+    branch: master
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  on:
+    tags: true
+before_install:
+- openssl aes-256-cbc -K $encrypted_577c2af3e254_key -iv $encrypted_577c2af3e254_iv
+  -in github_deploy_key.enc -out /tmp/github_deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/github_deploy_key
+- ssh-add /tmp/github_deploy_key
+after_deploy:
+- rm /tmp/github_deploy_key
+- ssh-add -D
