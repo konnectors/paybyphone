@@ -43,7 +43,7 @@
     "babel-jest": "^22.4.4",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.5.1",
-    "cozy-app-publish": "0.3.6",
+    "cozy-app-publish": "0.6.0",
     "cozy-jobs-cli": "1.2.0",
     "eslint": "4.19.1",
     "eslint-config-cozy-app": "0.8.0",
