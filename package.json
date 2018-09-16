@@ -44,7 +44,7 @@
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.5.1",
     "cozy-app-publish": "0.7.2",
-    "cozy-jobs-cli": "1.2.0",
+    "cozy-jobs-cli": "1.4.10",
     "eslint": "4.19.1",
     "eslint-config-cozy-app": "0.8.0",
     "git-directory-deploy": "1.5.1",
