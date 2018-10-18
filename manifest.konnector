@@ -1,0 +1,89 @@
+{
+  "version": "1.1.0",
+  "name": "PayByPhone",
+  "type": "konnector",
+  "language": "node",
+  "icon": "icon.png",
+  "slug": "paybyphone",
+  "source": "git://github.com/konnectors/paybyphone.git",
+  "editor": "Cozy",
+  "vendor_link": "https://m2.paybyphone.com/login",
+  "categories": ["other"],
+  "fields": {
+    "login": {
+      "type": "text"
+    },
+    "password": {
+      "type": "password"
+    },
+    "advancedFields": {
+      "folderPath": {
+        "advanced": true,
+        "isRequired": false
+      }
+    }
+  },
+  "data_types": [
+    "bill"
+  ],
+  "screenshots": [ ],
+  "permissions": {
+    "bank operations": {
+      "type": "io.cozy.bank.operations"
+    },
+    "bills": {
+      "type": "io.cozy.bills"
+    },
+    "files": {
+      "type": "io.cozy.files"
+    },
+    "accounts": {
+      "type": "io.cozy.accounts",
+      "verbs": ["GET"]
+    }
+  },
+  "developer": {
+    "name": "Ptbrowne",
+    "url": "https://github.com/ptbrowne"
+  },
+  "langs": ["fr", "en"],
+  "locales": {
+    "fr": {
+      "short_description": "Première version du connecteur Paybyphone",
+      "long_description": "Attention : ce connecteur récupère en base les transactions Paybyphone, et ne sont pas encore visibles dans Cozy Drive. Une évolution prochaine du service fera la génération d'un fichier pdf récapitulatif des transactions.",
+      "permissions": {
+        "bank operations": {
+          "description": "Utilisé pour relier les factures à des operations bancaires"
+        },
+        "bills": {
+          "description": "Utilisé pour sauver les données des factures"
+        },
+        "files": {
+          "description": "Utilisé pour sauvegarder les factures"
+        },
+        "accounts": {
+          "description": "Utilisé pour obtenir les données du compte"
+        }
+      }
+    },
+    "en": {
+      "short_description": "First version of the Paybyphone connector",
+      "long_description": "Warning : this connector only retrieve the Paybyphone transactions. They are not yet visible in the Cozy Drive app. A later evolution will generate pdf files for the transactions in order to be accessible in the app.",
+      "permissions": {
+        "bank operations": {
+          "description": "Required to link bank operations to bills"
+        },
+        "bills": {
+          "description": "Required to save the bills data"
+        },
+        "files": {
+          "description": "Required to save the bills"
+        },
+        "accounts": {
+          "description": "Required to get the account's data"
+        }
+      }
+    }
+  },
+  "manifest_version": "2"
+}
