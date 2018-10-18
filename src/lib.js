@@ -67,7 +67,7 @@ lib.fetchParkingSessions = async () => {
 
 lib.billFromParkingSession = parkingSession => ({
   amount: parkingSession.totalCost.amount,
-  date: parkingSession.startTime,
+  date: new Date(parkingSession.startTime),
   metadata: {
     version: 1
   },
@@ -75,8 +75,8 @@ lib.billFromParkingSession = parkingSession => ({
   type: 'parking',
   vendor: 'PayByPhone',
   location: parkingSession.locationId,
-  startTime: parkingSession.startTime,
-  expireTime: parkingSession.expireTime,
+  startTime: new Date(parkingSession.startTime),
+  expireTime: new Date(parkingSession.expireTime),
   vehicle: parkingSession.vehicle.licensePlate
 })
 

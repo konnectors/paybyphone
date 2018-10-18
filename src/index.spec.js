@@ -47,8 +47,8 @@ describe('parking session to bill', () => {
       totalCost: {
         amount: 12
       },
-      startTime: '2018-05-24T10:31:01.140Z',
-      expireTime: '2018-05-24T11:01:01.760Z',
+      startTime: new Date('2018-05-24T10:31:01.140Z'),
+      expireTime: new Date('2018-05-24T11:01:01.760Z'),
       locationId: '60200',
       vehicle: {
         licensePlate: 'XY-DEADBEEF-12'
@@ -56,13 +56,13 @@ describe('parking session to bill', () => {
     }
     expect(lib.billFromParkingSession(parkingSession)).toEqual({
       amount: 12,
-      date: '2018-05-24T10:31:01.140Z',
-      expireTime: '2018-05-24T11:01:01.760Z',
+      date: new Date('2018-05-24T10:31:01.140Z'),
+      expireTime: new Date('2018-05-24T11:01:01.760Z'),
       location: '60200',
       metadata: {
         version: 1
       },
-      startTime: '2018-05-24T10:31:01.140Z',
+      startTime: new Date('2018-05-24T10:31:01.140Z'),
       subtype: 'Parking pour XY-DEADBEEF-12',
       type: 'parking',
       vehicle: 'XY-DEADBEEF-12',
