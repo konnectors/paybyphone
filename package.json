@@ -34,14 +34,14 @@
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
-    "cozy-konnector-libs": "4.14.4",
+    "cozy-konnector-libs": "4.14.8",
     "node-fetch": "2.3.0",
     "querystring": "0.2.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "4.6.0",
     "cozy-app-publish": "0.10.5",
-    "cozy-jobs-cli": "1.7.8",
+    "cozy-jobs-cli": "1.7.10",
     "eslint": "5.14.1",
     "eslint-config-cozy-app": "1.1.4",
     "git-directory-deploy": "1.5.1",
