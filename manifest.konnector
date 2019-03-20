@@ -5,7 +5,7 @@
   "language": "node",
   "icon": "icon.png",
   "slug": "paybyphone",
-  "source": "git://github.com/konnectors/paybyphone.git",
+  "source": "git@github.com:konnectors/paybyphone.git",
   "editor": "Cozy",
   "vendor_link": "https://m2.paybyphone.com/login",
   "categories": [
