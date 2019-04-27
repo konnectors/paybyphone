@@ -35,13 +35,13 @@
   },
   "dependencies": {
     "cozy-konnector-libs": "4.15.4",
-    "node-fetch": "2.3.0",
+    "node-fetch": "2.4.0",
     "querystring": "0.2.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "4.6.0",
     "cozy-app-publish": "0.15.0",
-    "cozy-jobs-cli": "1.8.5",
+    "cozy-jobs-cli": "1.8.6",
     "eslint": "5.16.0",
     "eslint-config-cozy-app": "1.1.12",
     "eslint-plugin-prettier": "3.0.1",
