@@ -1,11 +1,21 @@
-const { requestFactory, log, saveBills } = require('cozy-konnector-libs')
+const {
+  requestFactory,
+  log,
+  saveBills,
+  createCozyPDFDocument,
+  htmlToPDF
+} = require('cozy-konnector-libs')
 const merge = require('lodash/merge')
 const { jar } = require('request')
 const querystring = require('querystring')
 
 const j = jar()
+const cheerio = require('cheerio')
+const moment = require('moment')
+moment.locale('fr')
 
 const request = requestFactory({
+  debug: true,
   // this allows request-promise to keep cookies between requests
   jar: j
 })
@@ -43,11 +53,14 @@ lib.start = async fields => {
     return
   }
   log('info', 'Successfully logged in')
-  // // The BaseKonnector instance expects a Promise as return of the function
+  // The BaseKonnector instance expects a Promise as return of the function
   log('info', 'Fetching the list of parking sessions')
   const parkingSessions = await lib.fetchParkingSessions()
-  const bills = parkingSessions.map(lib.billFromParkingSession)
-
+  const bills = []
+  for (const session of parkingSessions) {
+    const bill = await lib.billFromParkingSession(session)
+    bills.push(bill)
+  }
   await saveBills(bills, fields.folderPath, {
     // PayByPhone puts the name of the town as the label of the banking operation so
     // it changes everytime
@@ -60,25 +73,59 @@ lib.fetchParkingSessions = async () => {
     uri: `${baseUrl}parking/accounts/`
   })
   accountId = accounts[0].id
-  return lib.authorizedRequest({
+  const $ = await lib.authorizedRequest({
     uri: `${baseUrl}parking/accounts/${accountId}/sessions?limit=10&offset=0&order=DESC&periodType=Historic`
   })
+  return $
 }
 
-lib.billFromParkingSession = parkingSession => ({
-  amount: parkingSession.totalCost.amount,
-  date: new Date(parkingSession.startTime),
-  metadata: {
-    version: 1
-  },
-  subtype: `Parking pour ${parkingSession.vehicle.licensePlate}`,
-  type: 'parking',
-  vendor: 'PayByPhone',
-  location: parkingSession.locationId,
-  startTime: new Date(parkingSession.startTime),
-  expireTime: new Date(parkingSession.expireTime),
-  vehicle: parkingSession.vehicle.licensePlate
-})
+lib.billFromParkingSession = async parkingSession => {
+  // Gather info about location
+  const location = await lib.authorizedRequest({
+    uri: `${baseUrl}parking/locations/${parkingSession.locationId}`
+  })
+  // Generating an html with infos
+  const html = `<body>
+<h5>Paybyphone</h5>
+<p><b>&nbsp\nRésumé de stationnement</b></p>
+<p>${location.name}</p>
+<p>${location.vendorName}
+<p>&nbsp\nDépart : ${moment(parkingSession.startTime).format('LLL')}</p>
+<p>Expiration : ${moment(parkingSession.expireTime).format('LLL')}</p>
+<p>Code tarif/zone : ${parkingSession.locationId}</p>
+<p>
+<p>Immatriculation : ${parkingSession.vehicle.licensePlate}</p>
+<p><b>Montant total : ${parkingSession.totalCost.amount} ${
+    parkingSession.totalCost.currency
+  }</b>(frais de service compris)</p>
+<p>&nbsp\n&nbsp\nGénéré par Cozy depuis le site https://paybyphone.com</p>
+</body>`
+  const $ = cheerio.load(html)
+  // Generating a PDF with this html
+  const pdf = createCozyPDFDocument('', '')
+  htmlToPDF($, pdf, $('body'), { baseUrl: 'https://paybyphone' })
+  pdf.end()
+  const date = new Date(parkingSession.startTime)
+  return {
+    amount: parkingSession.totalCost.amount,
+    date,
+    filestream: pdf,
+    filename:
+      `${moment(date).format('YYYY-MM-DD')}_Paybyphone_${
+        parkingSession.totalCost.amount
+      }` + `${parkingSession.totalCost.currency}_${location.vendorName}.pdf`,
+    metadata: {
+      version: 1
+    },
+    subtype: `Parking pour ${parkingSession.vehicle.licensePlate}`,
+    type: 'parking',
+    vendor: 'PayByPhone',
+    location: parkingSession.locationId,
+    startTime: new Date(parkingSession.startTime),
+    expireTime: new Date(parkingSession.expireTime),
+    vehicle: parkingSession.vehicle.licensePlate
+  }
+}
 
 lib.authorizedRequest = options => {
   return request(
