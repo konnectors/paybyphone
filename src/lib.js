@@ -15,7 +15,7 @@ const moment = require('moment')
 moment.locale('fr')
 
 const request = requestFactory({
-  debug: true,
+  // debug: true,
   // this allows request-promise to keep cookies between requests
   jar: j
 })
@@ -57,6 +57,7 @@ lib.start = async fields => {
   log('info', 'Fetching the list of parking sessions')
   const parkingSessions = await lib.fetchParkingSessions()
   const bills = []
+  log('info', `Generating PDF for each ${parkingSessions.length}sessions`)
   for (const session of parkingSessions) {
     const bill = await lib.billFromParkingSession(session)
     bills.push(bill)
@@ -69,14 +70,27 @@ lib.start = async fields => {
 }
 
 lib.fetchParkingSessions = async () => {
+  let sessions = []
+  // We select only the first account there
   const accounts = await lib.authorizedRequest({
     uri: `${baseUrl}parking/accounts/`
   })
   accountId = accounts[0].id
-  const $ = await lib.authorizedRequest({
-    uri: `${baseUrl}parking/accounts/${accountId}/sessions?limit=10&offset=0&order=DESC&periodType=Historic`
-  })
-  return $
+  // Aggregate all possible result 10 by 10 (as it seems to be the max request)
+  let moreSessions = true
+  let offset = 0
+  while (moreSessions === true) {
+    const tempSessions = await lib.authorizedRequest({
+      uri: `${baseUrl}parking/accounts/${accountId}/sessions?limit=10&offset=${offset}&order=DESC&periodType=Historic`
+    })
+    sessions = sessions.concat(tempSessions)
+    offset += 10
+    if (tempSessions.length < 10) {
+      // Stop loop
+      moreSessions = false
+    }
+  }
+  return sessions
 }
 
 lib.billFromParkingSession = async parkingSession => {
@@ -103,7 +117,7 @@ lib.billFromParkingSession = async parkingSession => {
   const $ = cheerio.load(html)
   // Generating a PDF with this html
   const pdf = createCozyPDFDocument('', '')
-  htmlToPDF($, pdf, $('body'), { baseUrl: 'https://paybyphone' })
+  htmlToPDF($, pdf, $('body'), { baseUrl: '' })
   pdf.end()
   const date = new Date(parkingSession.startTime)
   return {
