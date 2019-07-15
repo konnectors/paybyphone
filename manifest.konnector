@@ -3,7 +3,7 @@
   "name": "PayByPhone",
   "type": "konnector",
   "language": "node",
-  "icon": "icon.png",
+  "icon": "icon.svg",
   "slug": "paybyphone",
   "source": "git@github.com:konnectors/paybyphone.git",
   "editor": "Cozy",
@@ -56,8 +56,8 @@
   ],
   "locales": {
     "fr": {
-      "short_description": "Première version du connecteur Paybyphone",
-      "long_description": "Attention : ce connecteur récupère en base les transactions Paybyphone, et ne sont pas encore visibles dans Cozy Drive. Une évolution prochaine du service fera la génération d'un fichier pdf récapitulatif des transactions.",
+      "short_description": "Connecteur Paybyphone, micro-paiements de parking par téléphone",
+      "long_description": "Ce connecteur récupère sur le site les transactions Paybyphone, et génère un pdf pour chaque paiement.\nAttention : L'identifiant est votre numéro de téléphone.",
       "permissions": {
         "bank operations": {
           "description": "Utilisé pour relier les factures à des operations bancaires"
@@ -74,8 +74,8 @@
       }
     },
     "en": {
-      "short_description": "First version of the Paybyphone connector",
-      "long_description": "Warning : this connector only retrieve the Paybyphone transactions. They are not yet visible in the Cozy Drive app. A later evolution will generate pdf files for the transactions in order to be accessible in the app.",
+      "short_description": "Paybyphone connector, car park micropayment by phone",
+      "long_description": "This connector fetch the Paybyphone transactions on the website and generate a pdf for each payment.\nWarning : The login is your phone number.",
       "permissions": {
         "bank operations": {
           "description": "Required to link bank operations to bills"
