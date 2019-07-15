@@ -45,6 +45,14 @@ const translateError = e => {
 // the account information come from ./konnector-dev-config.json file
 lib.start = async fields => {
   log('info', 'Authenticating ...')
+  // We know many people use mail as login, it's not possible in all way known to us.
+  //   (.fr, .com)
+  // We chose here to not even execute the login
+  // A warning is added in description
+  if (fields.login.includes('@')) {
+    log('error', 'Login contains a @, connector exit before authentification')
+    throw 'LOGIN_FAILED'
+  }
   try {
     await lib.authenticate(fields.login, fields.password)
   } catch (e) {
