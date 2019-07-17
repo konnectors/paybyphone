@@ -172,7 +172,7 @@ lib.authorizedRequest = options => {
 // this shows authentication using the [signin function](https://github.com/konnectors/libs/blob/master/packages/cozy-konnector-libs/docs/api.md#module_signin)
 // even if this in another domain here, but it works as an example
 lib.authenticate = async function(username, password) {
-  if(username[0] != '+') {
+  if (username[0] != '+') {
     username = `+33${username}`
   }
   const tokenData = await request({
