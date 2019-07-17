@@ -65,7 +65,7 @@ lib.start = async fields => {
   log('info', 'Fetching the list of parking sessions')
   const parkingSessions = await lib.fetchParkingSessions()
   const bills = []
-  log('info', `Generating PDF for each ${parkingSessions.length}sessions`)
+  log('info', `Generating PDF for each ${parkingSessions.length} sessions`)
   for (const session of parkingSessions) {
     try {
       const bill = await lib.billFromParkingSession(session)
@@ -172,6 +172,9 @@ lib.authorizedRequest = options => {
 // this shows authentication using the [signin function](https://github.com/konnectors/libs/blob/master/packages/cozy-konnector-libs/docs/api.md#module_signin)
 // even if this in another domain here, but it works as an example
 lib.authenticate = async function(username, password) {
+  if(username[0] != '+') {
+    username = `+33${username}`
+  }
   const tokenData = await request({
     method: 'POST',
     uri: 'https://api.paybyphone.com/identity/token',
@@ -180,7 +183,7 @@ lib.authenticate = async function(username, password) {
     },
     body: querystring.stringify({
       grant_type: 'password',
-      username: `+33${username}`,
+      username: username,
       password: password,
       client_id: 'paybyphone_webapp'
     })
