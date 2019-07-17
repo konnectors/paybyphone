@@ -36,7 +36,10 @@ const authErrorToCozyError = {
 }
 
 const translateError = e => {
-  const description = e && e.response && e.response.error_description
+  const description =
+    (e && e.response && e.response.error_description) ||
+    (e && e.error && e.error.error_description)
+  log('error', description)
   return authErrorToCozyError[description] || 'UNKNOWN_ERROR'
 }
 
