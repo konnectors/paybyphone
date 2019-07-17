@@ -73,7 +73,8 @@ lib.start = async fields => {
   await saveBills(bills, fields.folderPath, {
     // PayByPhone puts the name of the town as the label of the banking operation so
     // it changes everytime
-    identifiers: ['']
+    identifiers: [''],
+    contentType: 'application/pdf'
   })
 }
 
