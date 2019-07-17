@@ -67,8 +67,12 @@ lib.start = async fields => {
   const bills = []
   log('info', `Generating PDF for each ${parkingSessions.length}sessions`)
   for (const session of parkingSessions) {
-    const bill = await lib.billFromParkingSession(session)
-    bills.push(bill)
+    try {
+      const bill = await lib.billFromParkingSession(session)
+      bills.push(bill)
+    } catch (err) {
+      log('warn', err.message)
+    }
   }
   await saveBills(bills, fields.folderPath, {
     // PayByPhone puts the name of the town as the label of the banking operation so
