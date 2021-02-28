@@ -40,7 +40,7 @@
     "cozy-konnector-libs": "4.40.1",
     "moment": "2.29.1",
     "node-fetch": "2.6.1",
-    "querystring": "0.2.0"
+    "querystring": "0.2.1"
   },
   "devDependencies": {
     "cozy-jobs-cli": "1.15.9",
