@@ -3,7 +3,9 @@ const {
   log,
   saveBills,
   createCozyPDFDocument,
-  htmlToPDF
+  htmlToPDF,
+  cozyClient,
+  utils
 } = require('cozy-konnector-libs')
 const merge = require('lodash/merge')
 const { jar } = require('request')
@@ -13,6 +15,9 @@ const j = jar()
 const cheerio = require('cheerio')
 const moment = require('moment')
 moment.locale('fr')
+
+const models = cozyClient.new.models
+const { Qualification } = models.document
 
 const request = requestFactory({
   // debug: true,
@@ -153,7 +158,16 @@ lib.billFromParkingSession = async parkingSession => {
     location: parkingSession.locationId,
     startTime: new Date(parkingSession.startTime),
     expireTime: new Date(parkingSession.expireTime),
-    vehicle: parkingSession.vehicle.licensePlate
+    vehicle: parkingSession.vehicle.licensePlate,
+    fileAttributes: {
+      metadata: {
+        datetime: utils.formatDate(date),
+        datetimeLabel: 'issueDate',
+        contentAuthor: 'paybyphone.com',
+        carbonCopy: true,
+        qualification: Qualification.getByLabel('transport_invoice')
+      }
+    }
   }
 }
 

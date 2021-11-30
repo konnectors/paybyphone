@@ -92,5 +92,13 @@
       }
     }
   },
+  "features": [
+    "CARBON_COPY",
+    "SENTRY_V2",
+    "QUALIFICATION_V2"
+  ],
+  "qualification_labels": [
+    "transport_invoice"
+  ],
   "manifest_version": "2"
 }
