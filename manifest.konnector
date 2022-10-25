@@ -1,0 +1,104 @@
+{
+  "version": "1.5.0",
+  "name": "PayByPhone",
+  "type": "konnector",
+  "language": "node",
+  "icon": "icon.svg",
+  "slug": "paybyphone",
+  "source": "git@github.com:konnectors/paybyphone.git",
+  "editor": "Cozy",
+  "vendor_link": "https://m2.paybyphone.com/login",
+  "categories": [
+    "transport"
+  ],
+  "fields": {
+    "login": {
+      "type": "text"
+    },
+    "password": {
+      "type": "password"
+    },
+    "advancedFields": {
+      "folderPath": {
+        "advanced": true,
+        "isRequired": false
+      }
+    }
+  },
+  "data_types": [
+    "bill"
+  ],
+  "screenshots": [],
+  "permissions": {
+    "bank operations": {
+      "type": "io.cozy.bank.operations"
+    },
+    "bills": {
+      "type": "io.cozy.bills"
+    },
+    "files": {
+      "type": "io.cozy.files"
+    },
+    "accounts": {
+      "type": "io.cozy.accounts",
+      "verbs": [
+        "GET"
+      ]
+    }
+  },
+  "developer": {
+    "name": "Ptbrowne",
+    "url": "https://github.com/ptbrowne"
+  },
+  "langs": [
+    "fr",
+    "en"
+  ],
+  "locales": {
+    "fr": {
+      "short_description": "Connecteur Paybyphone, micro-paiements de parking par téléphone",
+      "long_description": "Ce connecteur récupère sur le site les transactions Paybyphone, et génère un pdf pour chaque paiement.\nAttention : L'identifiant est votre numéro de téléphone.",
+      "permissions": {
+        "bank operations": {
+          "description": "Utilisé pour relier les factures à des operations bancaires"
+        },
+        "bills": {
+          "description": "Utilisé pour sauver les données des factures"
+        },
+        "files": {
+          "description": "Utilisé pour sauvegarder les factures"
+        },
+        "accounts": {
+          "description": "Utilisé pour obtenir les données du compte"
+        }
+      }
+    },
+    "en": {
+      "short_description": "Paybyphone connector, car park micropayment by phone",
+      "long_description": "This connector fetch the Paybyphone transactions on the website and generate a pdf for each payment.\nWarning : The login is your phone number.",
+      "permissions": {
+        "bank operations": {
+          "description": "Required to link bank operations to bills"
+        },
+        "bills": {
+          "description": "Required to save the bills data"
+        },
+        "files": {
+          "description": "Required to save the bills"
+        },
+        "accounts": {
+          "description": "Required to get the account's data"
+        }
+      }
+    }
+  },
+  "features": [
+    "CARBON_COPY",
+    "SENTRY_V2",
+    "QUALIFICATION_V2"
+  ],
+  "qualification_labels": [
+    "transport_invoice"
+  ],
+  "manifest_version": "2"
+}
