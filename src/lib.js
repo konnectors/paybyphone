@@ -5,7 +5,8 @@ const {
   createCozyPDFDocument,
   htmlToPDF,
   cozyClient,
-  utils
+  utils,
+  solveCaptcha
 } = require('cozy-konnector-libs')
 const merge = require('lodash/merge')
 const { jar } = require('request')
@@ -24,7 +25,8 @@ const request = requestFactory({
   // this allows request-promise to keep cookies between requests
   jar: j
 })
-const baseUrl = 'https://api.paybyphone.com/'
+const consumerUrl = 'https://consumer.paybyphoneapis.com'
+const authUrl = 'https://auth.paybyphoneapis.com'
 let tokenData, accountId
 
 const lib = {}
@@ -94,7 +96,7 @@ lib.fetchParkingSessions = async () => {
   let sessions = []
   // We select only the first account there
   const accounts = await lib.authorizedRequest({
-    uri: `${baseUrl}parking/accounts/`
+    uri: `${consumerUrl}/parking/accounts`
   })
   accountId = accounts[0].id
   // Aggregate all possible result 10 by 10 (as it seems to be the max request)
@@ -102,7 +104,7 @@ lib.fetchParkingSessions = async () => {
   let offset = 0
   while (moreSessions === true) {
     const tempSessions = await lib.authorizedRequest({
-      uri: `${baseUrl}parking/accounts/${accountId}/sessions?limit=10&offset=${offset}&order=DESC&periodType=Historic`
+      uri: `${consumerUrl}/parking/accounts/${accountId}/sessions?limit=10&offset=${offset}&order=DESC&periodType=Historic`
     })
     sessions = sessions.concat(tempSessions)
     offset += 10
@@ -117,7 +119,7 @@ lib.fetchParkingSessions = async () => {
 lib.billFromParkingSession = async parkingSession => {
   // Gather info about location
   const location = await lib.authorizedRequest({
-    uri: `${baseUrl}parking/locations/${parkingSession.locationId}`
+    uri: `${consumerUrl}/v2/inventory/locations/${parkingSession.locationId}`
   })
   // Generating an html with infos
   const html = `<body>
@@ -164,7 +166,6 @@ lib.billFromParkingSession = async parkingSession => {
         datetime: utils.formatDate(date),
         datetimeLabel: 'issueDate',
         contentAuthor: 'paybyphone.com',
-        carbonCopy: true,
         qualification: Qualification.getByLabel('transport_invoice')
       }
     }
@@ -188,15 +189,21 @@ lib.authorizedRequest = options => {
 
 // this shows authentication using the [signin function](https://github.com/konnectors/libs/blob/master/packages/cozy-konnector-libs/docs/api.md#module_signin)
 // even if this in another domain here, but it works as an example
-lib.authenticate = async function(username, password) {
+lib.authenticate = async function (username, password) {
+  const gRecaptcha = await solveCaptcha({
+    websiteKey: '6LerxzccAAAAAHqoR2GFPOU4i9LcYvRwcZ03-Bb_',
+    websiteURL: 'https://m2.paybyphone.fr/login'
+  })
   if (username[0] != '+') {
     username = `+33${username}`
   }
   const tokenData = await request({
     method: 'POST',
-    uri: 'https://api.paybyphone.com/identity/token',
+    uri: `${authUrl}/token`,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-Pbp-ClientType': 'WebApp',
+      'x-pbp-verificationtoken': gRecaptcha
     },
     body: querystring.stringify({
       grant_type: 'password',
