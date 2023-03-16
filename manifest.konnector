@@ -93,7 +93,6 @@
     }
   },
   "features": [
-    "CARBON_COPY",
     "SENTRY_V2",
     "QUALIFICATION_V2"
   ],
