@@ -166,7 +166,6 @@ lib.billFromParkingSession = async parkingSession => {
         datetime: utils.formatDate(date),
         datetimeLabel: 'issueDate',
         contentAuthor: 'paybyphone.com',
-        carbonCopy: true,
         qualification: Qualification.getByLabel('transport_invoice')
       }
     }
