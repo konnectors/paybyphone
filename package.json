@@ -38,7 +38,7 @@
   "dependencies": {
     "cozy-konnector-libs": "5.12.1",
     "moment": "2.29.4",
-    "node-fetch": "2.6.7",
+    "node-fetch": "2.7.0",
     "pdfjs": "^2.4.7",
     "querystring": "0.2.1"
   },
